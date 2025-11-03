@@ -2,16 +2,17 @@ name: "Draw Keymap"
 
 on:
   workflow_dispatch:
-  # push時に自動で実行する場合は、以下のコメントアウトを外す
-  # push:
-  #   paths:
-  #     - "config/roBa.keymap"
-  #     - "keymap_drawer.config.yaml"
-  #     - "config/roBa.dtsi"
+  push:
+    branches:
+      - main
+    paths:
+      - "config/roBa.keymap"
+      - "keymap_drawer.config.yaml"
+      - "config/roBa.dtsi"
 
 jobs:
   draw:
-    uses: caksoylar/keymap-drawer/.github/workflows/draw-zmk.yml@f9cf9d3677368a7fb1dc505c51b8156fafa66fe2
+    uses: caksoylar/keymap-drawer/.github/workflows/draw-zmk.yml@2d0588fc7f2f1f446e876308e34e26bec1c21f3f
     permissions:
       contents: write
     with:
@@ -21,4 +22,4 @@ jobs:
       json_path: "config"
       config_path: "keymap_drawer.config.yaml" # config file, ignored if not exists
       output_folder: "keymap-drawer"
-      destination: "both"
+      destination: ${{ github.ref == 'refs/heads/main' && 'both' || 'artifact' }}
